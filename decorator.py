@@ -44,14 +44,11 @@ class Purchase:
 
 
 def calculate_tax(func):
-    def wrraped_func(pur):
+    def wrapped_func(pur):
         tax = TAX[pur.address.country]
-        s = 0
-        for product in pur.product_list:
-            s += product.price + product.price * tax / 100
-        return s
+        return pur.total_price() + pur.total_price() * tax / 100
 
-    return wrraped_func
+    return wrapped_func
 
 
 def show_total_price(pur):
@@ -82,7 +79,8 @@ if __name__ == "__main__":
     purchase_uae.add_product([p1, p2, p3])
 
     print(f"{purchase_iran.user.fullname}---{purchase_iran.address.country}---: {show_total_price(purchase_iran)}")
-    print(f"{purchase_iran.user.fullname}---{purchase_iran.address.country}---: {show_total_tax_price(purchase_iran)}\n")
+    print(
+        f"{purchase_iran.user.fullname}---{purchase_iran.address.country}---: {show_total_tax_price(purchase_iran)}\n")
 
     print(f"{purchase_uae.user.fullname}---{purchase_uae.address.country}---: {show_total_price(purchase_uae)}")
     print(f"{purchase_uae.user.fullname}---{purchase_uae.address.country}---: {show_total_tax_price(purchase_uae)}")
