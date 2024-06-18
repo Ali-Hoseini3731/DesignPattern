@@ -2,6 +2,14 @@ COUNTRIES = ["Iran", "UAE"]
 TAX = {"Iran": 9, "UAE": 20}
 
 
+def check_permision(func):
+    def wrapped_func(obj, user):
+        if obj.user == user:
+            return func(obj, user)
+        return f"your not allowed Mr: {user.fullname}"
+    return wrapped_func
+
+
 class User:
     def __init__(self, first_name, last_name, phone, email):
         self.first_name = first_name
@@ -42,6 +50,10 @@ class Purchase:
             s += product.price
         return s
 
+    @check_permision
+    def checkout(self, user):
+        return f"checkout done Mr: {user.fullname}"
+
 
 def calculate_tax(func):
     def wrapped_func(pur):
@@ -78,9 +90,13 @@ if __name__ == "__main__":
     purchase_uae = Purchase(user=user1, address=addr_uae)
     purchase_uae.add_product([p1, p2, p3])
 
-    print(f"{purchase_iran.user.fullname}---{purchase_iran.address.country}---: {show_total_price(purchase_iran)}")
-    print(
-        f"{purchase_iran.user.fullname}---{purchase_iran.address.country}---: {show_total_tax_price(purchase_iran)}\n")
+    user2 = User(first_name="kazem", last_name="Hoseini", phone=3425, email="k@gmail.com")
 
-    print(f"{purchase_uae.user.fullname}---{purchase_uae.address.country}---: {show_total_price(purchase_uae)}")
-    print(f"{purchase_uae.user.fullname}---{purchase_uae.address.country}---: {show_total_tax_price(purchase_uae)}")
+    # print(f"{purchase_iran.user.fullname}---{purchase_iran.address.country}---: {show_total_price(purchase_iran)}")
+    # print(
+    #     f"{purchase_iran.user.fullname}---{purchase_iran.address.country}---: {show_total_tax_price(purchase_iran)}\n")
+    #
+    # print(f"{purchase_uae.user.fullname}---{purchase_uae.address.country}---: {show_total_price(purchase_uae)}")
+    # print(f"{purchase_uae.user.fullname}---{purchase_uae.address.country}---: {show_total_tax_price(purchase_uae)}")
+
+    print(purchase_iran.checkout(user1))
